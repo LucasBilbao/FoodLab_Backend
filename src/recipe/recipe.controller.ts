@@ -1,33 +1,64 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
+  ParseArrayPipe,
+  ParseIntPipe,
+  Patch,
+  Post,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { RecipeService } from './recipe.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { OrderType } from 'src/types/order.type';
+import { TagService } from './services/tag.service';
 
 @Controller('recipes')
 export class RecipeController {
-  constructor(private readonly recipeService: RecipeService) {}
+  constructor(
+    private readonly recipeService: RecipeService,
+    private readonly tagService: TagService,
+  ) {}
 
   @Get()
   public async findAll(
     @Query('sortBy') sortBy: string = 'createdAt',
     @Query('order') order: OrderType = 'DESC',
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query('tags', new ParseArrayPipe({ optional: true })) tags: string[] = [],
+    @Query('search') search: string = '',
   ) {
-    return await this.recipeService.findAll(sortBy, order);
+    return await this.recipeService.findAll(
+      sortBy,
+      order,
+      limit,
+      page,
+      tags,
+      search,
+    );
+  }
+
+  @Get('tags')
+  public getTags() {
+    return this.tagService.getTags();
   }
 
   @Post()
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   create(@Body() createRecipeDto: CreateRecipeDto) {
     return this.recipeService.create(createRecipeDto);
+  }
+
+  @Post('multi')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  createMultiple(@Body() createRecipeDtos: CreateRecipeDto[]) {
+    return this.recipeService.createMultiple(createRecipeDtos);
   }
 
   @Get(':id')
