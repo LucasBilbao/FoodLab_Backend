@@ -16,7 +16,7 @@ export class TagService {
         const existing = await this.tagRepo.findOneBy({
           name: tag.name,
         });
-        console.log(existing);
+
         if (existing) return existing;
 
         const newTag = this.tagRepo.create(tag);

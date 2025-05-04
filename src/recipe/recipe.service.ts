@@ -6,12 +6,14 @@ import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { OrderType } from 'src/types/order.type';
 import { TagService } from './services/tag.service';
+import { DeepseekService } from './services/deepseek.service';
 
 @Injectable()
 export class RecipeService {
   constructor(
     @InjectRepository(Recipe) private readonly recipeRepo: Repository<Recipe>,
     private readonly tagService: TagService,
+    private readonly deepseekService: DeepseekService,
   ) {}
 
   public async findAll(
@@ -49,6 +51,17 @@ export class RecipeService {
       imgUrl: recipe.imgUrl,
       tags: recipe.tags,
     }));
+
+    let aiGeneratedRecipe: Recipe | null = null;
+    if (mappedRecipes.length === 0) {
+      aiGeneratedRecipe = await this.create(
+        (await this.deepseekService.generate(search, tags)) as CreateRecipeDto,
+      );
+    }
+
+    if (aiGeneratedRecipe) {
+      mappedRecipes.push(aiGeneratedRecipe);
+    }
 
     return {
       recipes: mappedRecipes,
