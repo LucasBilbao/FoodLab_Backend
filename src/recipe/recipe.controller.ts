@@ -18,7 +18,7 @@ import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { OrderType } from 'src/types/order.type';
 import { TagService } from './services/tag.service';
 
-@Controller('recipes')
+@Controller('api/recipes')
 export class RecipeController {
   constructor(
     private readonly recipeService: RecipeService,
@@ -42,6 +42,13 @@ export class RecipeController {
       tags,
       search,
     );
+  }
+
+  @Post('generate-recipe')
+  public async generate(
+    @Body('prompt') prompt: string,
+  ): Promise<{ id: string }> {
+    return await this.recipeService.generateRecipe(prompt);
   }
 
   @Get('tags')

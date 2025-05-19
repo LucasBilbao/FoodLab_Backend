@@ -1,5 +1,5 @@
 export const RECIPE_GENERATION_REQUEST_STRING = `
-please generate a recipe for me that adheres to the previous description and has responds to this interface and as a json string no additional content is allowed:
+\nplease generate a recipe for me that adheres to the previous description and responds to this interface and as a json string no additional content is allowed:
 export interface Ingredient {
   name: string;
   quantity: number;

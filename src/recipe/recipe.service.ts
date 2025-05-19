@@ -52,21 +52,18 @@ export class RecipeService {
       tags: recipe.tags,
     }));
 
-    let aiGeneratedRecipe: Recipe | null = null;
-    if (mappedRecipes.length === 0) {
-      aiGeneratedRecipe = await this.create(
-        (await this.deepseekService.generate(search, tags)) as CreateRecipeDto,
-      );
-    }
-
-    if (aiGeneratedRecipe) {
-      mappedRecipes.push(aiGeneratedRecipe);
-    }
-
     return {
       recipes: mappedRecipes,
       total,
     };
+  }
+
+  public async generateRecipe(prompt: string): Promise<{ id: string }> {
+    const newRecipe: Recipe = await this.create(
+      (await this.deepseekService.generate(prompt)) as CreateRecipeDto,
+    );
+
+    return { id: newRecipe.id };
   }
 
   public async create(createRecipeDto: CreateRecipeDto): Promise<Recipe> {

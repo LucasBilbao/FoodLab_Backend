@@ -10,8 +10,8 @@ export class DeepseekService {
     apiKey: env.DEEPSEEK_API_KEY,
   });
 
-  public async generate(search: string, tags: string[]) {
-    const content = getSearchPrompt(search, tags);
+  public async generate(search: string) {
+    const content = getSearchPrompt(search);
     const { choices } = await this.openAi.chat.completions.create({
       model: 'deepseek/deepseek-r1:free',
       messages: [
