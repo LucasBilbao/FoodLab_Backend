@@ -40,6 +40,11 @@ jobs:
         run: echo "FRONTEND_URL=$FRONTEND_URL" >> .env
       - name: Add OPENAI_API_URL key to env
         run: echo "OPENAI_API_URL=$OPENAI_API_URL" >> .env
+      - name: Upload env file
+        uses: actions/upload-artifact@v4
+        with:
+          name: env-file
+          path: .env
   build:
     runs-on: ubuntu-latest
 
@@ -54,6 +59,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Download env file
+        uses: actions/download-artifact@v4
+        with:
+          name: env-file
       - name: Display env file
         run: cat .env
       - run: npm install
