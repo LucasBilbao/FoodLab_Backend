@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: env-file
-          path: .env
+          path: ./.env
   build:
     runs-on: ubuntu-latest
     needs: setup-env
