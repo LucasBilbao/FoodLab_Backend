@@ -9,6 +9,10 @@ export class QueryBuilderFacade<T extends ObjectLiteral> {
   }
 
   public addSearchQuery(searchWords: string[]): QueryBuilderFacade<T> {
+    if (searchWords.length === 0) {
+      return this;
+    }
+
     this.queryBuilder.andWhere(
       new Brackets((qb) => {
         searchWords.forEach((word, index) => {

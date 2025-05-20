@@ -16,6 +16,9 @@ export class AiAssistanceService {
   private openAiFacade: OpenAiFacade = new OpenAiFacade(env.OPENAI_API_KEY);
 
   public async generateSearchKeywords(prompt: string): Promise<string[]> {
+    if (prompt.length === 0) {
+      return [];
+    }
     const content = `${prompt} ${SEARCH_KEYWORDS_REQUEST_STRING}`;
     const messages: OpenAI.ChatCompletionMessageParam[] = [
       {
