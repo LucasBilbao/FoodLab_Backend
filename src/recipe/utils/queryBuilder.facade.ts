@@ -1,6 +1,5 @@
 import { OrderType } from 'src/types/order.type';
 import { Brackets, ObjectLiteral, SelectQueryBuilder } from 'typeorm';
-import fs from 'fs';
 
 export class QueryBuilderFacade<T extends ObjectLiteral> {
   private readonly queryBuilder: SelectQueryBuilder<T>;
@@ -10,11 +9,6 @@ export class QueryBuilderFacade<T extends ObjectLiteral> {
   }
 
   public addSearchQuery(searchWords: string[]): QueryBuilderFacade<T> {
-    fs.writeFileSync(
-      'searchWords.txt',
-      JSON.stringify(searchWords, null, 2),
-      'utf-8',
-    );
     this.queryBuilder.andWhere(
       new Brackets((qb) => {
         searchWords.forEach((word, index) => {
