@@ -8,12 +8,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: 'postgres',
       host: env.DB_HOST || 'localhost',
       port: env.DB_PORT ? parseInt(env.DB_PORT) : 3306,
       username: env.DB_USERNAME,
       password: env.DB_PASSWORD,
       database: env.DB_DATABASE,
+      url: env.DB_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),

@@ -1,0 +1,17 @@
+[
+  "shawarma",
+  "meat",
+  "spices",
+  "grill",
+  "tortilla",
+  "flatbread",
+  "sauce",
+  "chicken",
+  "beef",
+  "classic shawarma recipe",
+  "homemade shawarma",
+  "shawarma seasoning",
+  "grilled shawarma tips",
+  "shawarma wrap instructions",
+  "best shawarma sauce"
+]

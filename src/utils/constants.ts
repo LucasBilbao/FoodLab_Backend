@@ -23,3 +23,10 @@ export interface Recipe {
   tags: Tag[];
 }
 `;
+
+export const SEARCH_KEYWORDS_REQUEST_STRING = `
+\nplease generate a list of search keywords (max: 15 and a few should be a single word) for the recipe that adheres to the previous description and responds to this interface and as a json string no additional content is allowed:
+export interface SearchKeywords {
+  keywords: string[];
+}
+`;

@@ -6,14 +6,15 @@ import { Repository } from 'typeorm';
 import { Recipe } from './entities/recipe.entity';
 import { OrderType } from 'src/types/order.type';
 import { TagService } from './services/tag.service';
-import { DeepseekService } from './services/deepseek.service';
+import { AiAssistanceService } from './services/aiAssistance.service';
+import { QueryBuilderFacade } from './utils/queryBuilder.facade';
 
 @Injectable()
 export class RecipeService {
   constructor(
     @InjectRepository(Recipe) private readonly recipeRepo: Repository<Recipe>,
     private readonly tagService: TagService,
-    private readonly deepseekService: DeepseekService,
+    private readonly aiAssistanceService: AiAssistanceService,
   ) {}
 
   public async findAll(
@@ -24,25 +25,17 @@ export class RecipeService {
     tags: string[],
     search: string,
   ) {
-    const queryBuilder = this.recipeRepo
-      .createQueryBuilder('recipe')
-      .leftJoinAndSelect('recipe.tags', 'tag');
-
-    if (search) {
-      queryBuilder.andWhere(
-        '(recipe.title LIKE :search OR recipe.description LIKE :search OR tag.name LIKE :search)',
-        { search: `%${search}%` },
-      );
-    }
-
-    if (tags.length) {
-      queryBuilder.andWhere('tag.name IN (:...tags)', { tags });
-    }
-    const [recipes, total] = await queryBuilder
+    const [recipes, total] = await new QueryBuilderFacade<Recipe>(
+      this.recipeRepo.createQueryBuilder('recipe'),
+    )
+      .leftJoinAndSelect('recipe.tags', 'tag')
+      .addTagsQuery(tags)
+      .addSearchQuery(
+        await this.aiAssistanceService.generateSearchKeywords(search),
+      )
       .orderBy(`recipe.${sortBy}`, order)
-      .skip((page - 1) * limit)
-      .take(limit)
-      .getManyAndCount();
+      .skipToBy(page, limit)
+      .get();
 
     const mappedRecipes = recipes.map((recipe) => ({
       id: recipe.id,
@@ -59,9 +52,12 @@ export class RecipeService {
   }
 
   public async generateRecipe(prompt: string): Promise<{ id: string }> {
-    const newRecipe: Recipe = await this.create(
-      (await this.deepseekService.generate(prompt)) as CreateRecipeDto,
-    );
+    const recipe: CreateRecipeDto | undefined =
+      await this.aiAssistanceService.generate(prompt);
+    if (!recipe) {
+      throw new Error('Failed to generate recipe');
+    }
+    const newRecipe: Recipe = await this.create(recipe);
 
     return { id: newRecipe.id };
   }
