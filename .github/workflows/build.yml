@@ -14,8 +14,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Display secret variables
-        run: echo ${{ secrets.OPENAI_API_KEY }}
+      - name: Add DB_URL key to env
+        run: echo "DB_URL=${{ secrets.DB_URL }}" > .env
+      - name: Add DB_HOST key to env
+        run: echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+      - name: Add DB_PORT key to env
+        run: echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+      - name: Add DB_DATABASE key to env
+        run: echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" > .env
+      - name: Add DB_USERNAME key to env
+        run: echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+      - name: Add DB_PASSWORD key to env
+        run: echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+      - name: Add AI_API_KEY key to env
+        run: echo "AI_API_KEY=${{ secrets.AI_API_KEY }}" > .env
+      - name: Add FRONTEND_URL key to env
+        run: echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> .env
+      - name: Add OPENAI_API_URL key to env
+        run: echo "OPENAI_API_URL=${{ secrets.OPENAI_API_URL }}" >> .env
+      - name: Display env file
+        run: cat .env
   build:
 
     runs-on: ubuntu-latest
@@ -23,7 +41,6 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
