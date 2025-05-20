@@ -45,6 +45,12 @@ jobs:
         run: echo "OPENAI_API_URL=$OPENAI_API_URL" >> .env
       - name: List files
         run: ls -al
+
+      - name: Debug path before upload
+        run: |
+          pwd
+          ls -la
+
       - name: Upload env file
         uses: actions/upload-artifact@v4
         with:
