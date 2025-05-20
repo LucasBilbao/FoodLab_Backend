@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { env } from 'process';
 import { Models } from 'src/utils/models.enum';
 
 export class OpenAiFacade {
@@ -7,7 +8,7 @@ export class OpenAiFacade {
   constructor(apiKey: string | undefined) {
     this.openAi = new OpenAI({
       apiKey,
-      baseURL: process.env.OPENAI_API_URL,
+      baseURL: env.OPENAI_API_URL,
     });
   }
 

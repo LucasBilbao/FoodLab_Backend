@@ -13,7 +13,7 @@ import { CreateRecipeDto } from '../dto/create-recipe.dto';
 
 @Injectable()
 export class AiAssistanceService {
-  private openAiFacade: OpenAiFacade = new OpenAiFacade(env.AI_API_KEY);
+  private openAiFacade: OpenAiFacade = new OpenAiFacade(env.OPENAI_API_KEY);
 
   public async generateSearchKeywords(prompt: string): Promise<string[]> {
     const content = `${prompt} ${SEARCH_KEYWORDS_REQUEST_STRING}`;
