@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: env-file
-          path: .env
+          path: /home/runner/work/FoodLabs_Backend/FoodLabs_Backend/.env
           if-no-files-found: error
   build:
     runs-on: ubuntu-latest
