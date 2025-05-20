@@ -40,6 +40,8 @@ jobs:
         run: echo "FRONTEND_URL=$FRONTEND_URL" >> .env
       - name: Add OPENAI_API_URL key to env
         run: echo "OPENAI_API_URL=$OPENAI_API_URL" >> .env
+      - name: List files
+        run: ls -al
       - name: Upload env file
         uses: actions/upload-artifact@v4
         with:
