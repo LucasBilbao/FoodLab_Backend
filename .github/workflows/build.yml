@@ -1,4 +1,4 @@
-name: Node.js CI
+name: NestJS CI
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: ['main']
 
 jobs:
-  display:
+  setup-env:
     runs-on: ubuntu-latest
 
     env:
@@ -40,8 +40,6 @@ jobs:
         run: echo "FRONTEND_URL=$FRONTEND_URL" >> .env
       - name: Add OPENAI_API_URL key to env
         run: echo "OPENAI_API_URL=$OPENAI_API_URL" >> .env
-      - name: Display env file
-        run: cat .env
   build:
     runs-on: ubuntu-latest
 
@@ -56,6 +54,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - name: Display env file
+        run: cat .env
       - run: npm install
       - run: npm run build --if-present
       - run: node dist/main.js
