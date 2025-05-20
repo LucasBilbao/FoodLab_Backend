@@ -13,25 +13,36 @@ jobs:
   display: 
     runs-on: ubuntu-latest
 
+    env:
+      DB_URL: ${{ secrets.DB_URL }}
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_PORT: ${{ secrets.DB_PORT }}
+      DB_DATABASE: ${{ secrets.DB_DATABASE }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      AI_API_KEY: ${{ secrets.AI_API_KEY }}
+      FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+      OPENAI_API_URL: ${{ secrets.OPENAI_API_URL }}
+    
     steps:
       - name: Add DB_URL key to env
-        run: echo "DB_URL=${{ secrets.DB_URL }}" > .env
+        run: echo "DB_URL=$DB_URL" | base64 > .env
       - name: Add DB_HOST key to env
-        run: echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+        run: echo "DB_HOST=$DB_HOST" | base64 >> .env
       - name: Add DB_PORT key to env
-        run: echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+        run: echo "DB_PORT=$DB_PORT" | base64 >> .env
       - name: Add DB_DATABASE key to env
-        run: echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" > .env
+        run: echo "DB_DATABASE=$DB_DATABASE" | base64 > .env
       - name: Add DB_USERNAME key to env
-        run: echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env
+        run: echo "DB_USERNAME=$DB_USERNAME" | base64 >> .env
       - name: Add DB_PASSWORD key to env
-        run: echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+        run: echo "DB_PASSWORD=$DB_PASSWORD" | base64 >> .env
       - name: Add AI_API_KEY key to env
-        run: echo "AI_API_KEY=${{ secrets.AI_API_KEY }}" > .env
+        run: echo "AI_API_KEY=$AI_API_KEY" | base64 > .env
       - name: Add FRONTEND_URL key to env
-        run: echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> .env
+        run: echo "FRONTEND_URL=$FRONTEND_URL" | base64 >> .env
       - name: Add OPENAI_API_URL key to env
-        run: echo "OPENAI_API_URL=${{ secrets.OPENAI_API_URL }}" >> .env
+        run: echo "OPENAI_API_URL=$OPENAI_API_URL" | base64 >> .env
       - name: Display env file
         run: cat .env
   build:
