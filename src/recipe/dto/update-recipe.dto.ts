@@ -4,9 +4,37 @@ import {
   CreateInstructionDto,
   CreateRecipeDto,
 } from './create-recipe.dto';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
-export class UpdateRecipeDto extends PartialType(CreateRecipeDto) {}
+export class UpdateIngredientDto extends PartialType(CreateIngredientDto) {
+  @ApiPropertyOptional()
+  name?: string;
 
-export class UpdateIngredientDto extends PartialType(CreateIngredientDto) {}
+  @ApiPropertyOptional()
+  quantity?: number;
 
-export class UpdateInstructionDto extends PartialType(CreateInstructionDto) {}
+  @ApiPropertyOptional()
+  unit?: string;
+}
+
+export class UpdateInstructionDto extends PartialType(CreateInstructionDto) {
+  @ApiPropertyOptional()
+  description?: string;
+}
+
+export class UpdateRecipeDto extends PartialType(CreateRecipeDto) {
+  @ApiPropertyOptional()
+  title?: string;
+
+  @ApiPropertyOptional()
+  description?: string;
+
+  @ApiPropertyOptional()
+  imgUrl?: string;
+
+  @ApiPropertyOptional({ type: [CreateIngredientDto] })
+  ingredients?: CreateIngredientDto[];
+
+  @ApiPropertyOptional({ type: [CreateInstructionDto] })
+  instructions?: CreateInstructionDto[];
+}
